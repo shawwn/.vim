@@ -38,8 +38,8 @@ syn match lumenIdent display "|..\{-}|" contains=lumenSsyntax,lumenFn,lumenVar,l
 syn match lumenSsyntax display "[:~&.!]" 
 syn match lumenSsyntax display /[.!][^()[\]'`,"; \t|:~&.!]\+/ 
 syn match lumenSsyntax display "[.!]|..\{-}|" 
-syn match lumenSsyntax display /\(^\|[()[\]'`,"; \t|:~&.!]\)\zs:[^()[\]'`,"; \t|:~&.!]\+/
-syn match lumenSsyntax display /[^()[\]'`,"; \t|:~&.!]\+:\ze\($\|[()[\]'`,"; \t|:~&.!]\)/
+syn match lumenSsyntax display /\(^\|[()[\]'`,"; \t|:~&.!]\)\zs:[^()[\]{}'`,"; \t]\+/
+syn match lumenSsyntax display /[^()[\]'`,"; \t]\+:\ze\($\|[()[\]{}'`,"; \t]\)/
 
 "-------------------------------------------------------------------------------
 " Lists:
