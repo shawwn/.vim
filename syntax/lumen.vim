@@ -32,14 +32,14 @@ syn cluster lumenListCluster contains=TOP,lumenParenError,lumenParen0,lumenParen
 "-------------------------------------------------------------------------------
 " Identifiers:
 
-syn match lumenIdent display /[^\()[\]'`,"; \t|]\+/ contains=lumenSsyntax,lumenFn,lumenVar,lumenGlobal,lumenNonfloat 
+syn match lumenIdent display /[^()[\]'`,"; \t|]\+/ contains=lumenSsyntax,lumenFn,lumenVar,lumenGlobal,lumenNonfloat 
 syn match lumenIdent display "|..\{-}|" contains=lumenSsyntax,lumenFn,lumenVar,lumenGlobal,lumenNonfloat 
 
 syn match lumenSsyntax display "[:~&.!]" 
-syn match lumenSsyntax display /[.!][^\()[\]'`,"; \t|:~&.!]\+/ 
+syn match lumenSsyntax display /[.!][^()[\]'`,"; \t|:~&.!]\+/ 
 syn match lumenSsyntax display "[.!]|..\{-}|" 
-syn match lumenSsyntax display /[\()[\]'`,"; \t|:~&.!]\zs:[^\()[\]'`,"; \t|:~&.!]\+/
-syn match lumenSsyntax display /[^\()[\]'`,"; \t|:~&.!]\+:\ze\($\|[\()[\]'`,"; \t|:~&.!]\)/
+syn match lumenSsyntax display /\(^\|[()[\]'`,"; \t|:~&.!]\)\zs:[^()[\]'`,"; \t|:~&.!]\+/
+syn match lumenSsyntax display /[^()[\]'`,"; \t|:~&.!]\+:\ze\($\|[()[\]'`,"; \t|:~&.!]\)/
 
 "-------------------------------------------------------------------------------
 " Lists:
@@ -80,7 +80,7 @@ syn match lumenBracketError display "]"
 
 syn match lumenQuote display "'" 
 
-syn match lumenSym display /'[^\()[\]'`,"; \t|]\+/ contains=lumenQuote 
+syn match lumenSym display /'[^()[\]'`,"; \t|]\+/ contains=lumenQuote 
 syn match lumenSym display "'|..\{-}|" contains=lumenQuote 
 
 syn region lumenSym start=/'"/ skip=/\\"/ end=/"/ 
@@ -415,7 +415,7 @@ syn keyword lumenFn import
 "-------------------------------------------------------------------------------
 " Variables:
 
-syn match lumenGlobal display /[^\()[\]'`,"; \t|:~&.!]\+\*/ 
+syn match lumenGlobal display /[^()[\]'`,"; \t|:~&.!]\+\*/ 
 
 syn keyword lumenVar nil
 syn keyword lumenVar null
