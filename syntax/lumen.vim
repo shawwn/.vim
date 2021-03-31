@@ -36,8 +36,8 @@ syn match lumenIdent display /[^\()[\]'`,"; \t|]\+/ contains=lumenSsyntax,lumenF
 syn match lumenIdent display "|..\{-}|" contains=lumenSsyntax,lumenFn,lumenVar,lumenGlobal,lumenNonfloat 
 
 syn match lumenSsyntax display "[:~&.!]" 
-syn match lumenSsyntax display /![^\()[\]'`,"; \t|:~&.!]\+/ 
-syn match lumenSsyntax display "!|..\{-}|" 
+syn match lumenSsyntax display /[.!][^\()[\]'`,"; \t|:~&.!]\+/ 
+syn match lumenSsyntax display "[.!]|..\{-}|" 
 
 "-------------------------------------------------------------------------------
 " Lists:
@@ -307,23 +307,37 @@ syn keyword lumenFn write-file
 "
 " (define-macro ...)
 "
+syn keyword lumenFn %define
+syn keyword lumenFn %function
+syn keyword lumenFn %local-function
+syn keyword lumenFn %global-function
 syn keyword lumenFn arguments%
 syn keyword lumenFn at
 syn keyword lumenFn case
+syn keyword lumenFn case-let
 syn keyword lumenFn cat!
+syn keyword lumenFn class
 syn keyword lumenFn dec
-syn keyword lumenFn def
 syn keyword lumenFn define
+syn keyword lumenFn define*
+syn keyword lumenFn var
 syn keyword lumenFn define-global
+syn keyword lumenFn define-global*
 syn keyword lumenFn define-macro
 syn keyword lumenFn define-reader
 syn keyword lumenFn define-special
 syn keyword lumenFn define-symbol
 syn keyword lumenFn define-test
+syn keyword lumenFn define-variable
+syn keyword lumenFn define-constant
+syn keyword lumenFn define-transformer
+syn keyword lumenFn define-setter
 syn keyword lumenFn during-compilation
 syn keyword lumenFn each
+syn keyword lumenFn on
 syn keyword lumenFn export
 syn keyword lumenFn fn
+syn keyword lumenFn fn*
 syn keyword lumenFn for
 syn keyword lumenFn guard
 syn keyword lumenFn if
@@ -336,8 +350,8 @@ syn keyword lumenFn let-symbol
 syn keyword lumenFn let-unique
 syn keyword lumenFn let-when
 syn keyword lumenFn list
-syn keyword lumenFn mac
 syn keyword lumenFn obj
+syn keyword lumenFn on
 syn keyword lumenFn quasiquote
 syn keyword lumenFn quote
 syn keyword lumenFn set-of
@@ -355,6 +369,24 @@ syn keyword lumenFn with-frame
 syn keyword lumenFn with-indent
 
 "
+" shorthands
+"
+syn keyword lumenFn defalias
+syn keyword lumenFn defun
+syn keyword lumenFn defmacro
+syn keyword lumenFn defsym
+syn keyword lumenFn mac
+syn keyword lumenFn def
+syn keyword lumenFn defvar
+syn keyword lumenFn defconst
+syn keyword lumenFn defset
+syn keyword lumenFn let*
+syn keyword lumenFn try
+syn keyword lumenFn new
+syn keyword lumenFn iflet
+syn keyword lumenFn whenlet
+
+"
 " specials
 "
 syn keyword lumenFn get
@@ -370,19 +402,31 @@ syn keyword lumenFn break
 syn keyword lumenFn error
 syn keyword lumenFn return
 
+syn keyword lumenFn then
+syn keyword lumenFn elif
+syn keyword lumenFn else
+syn keyword lumenFn done
+syn keyword lumenFn end
+syn keyword lumenFn import
+
+
 "-------------------------------------------------------------------------------
 " Variables:
 
-" syn match lumenGlobal display /[^\()[\]'`,"; \t|:~&.!]\+\*/ 
+syn match lumenGlobal display /[^\()[\]'`,"; \t|:~&.!]\+\*/ 
 
 syn keyword lumenVar nil
+syn keyword lumenVar null
 syn keyword lumenVar true
 syn keyword lumenVar false
+syn keyword lumenVar t
+syn keyword lumenVar #t
+syn keyword lumenVar #f
 
 "-------------------------------------------------------------------------------
 " Optional Parameters:
 
-" syn region lumenOpt matchgroup=Identifier start="(o\>" skip="|..\{-}|" matchgroup=Identifier end=")" contains=TOP 
+syn region lumenOpt matchgroup=Identifier start="(o\>" skip="|..\{-}|" matchgroup=Identifier end=")" contains=TOP 
 
 "-------------------------------------------------------------------------------
 " Strings:
@@ -395,15 +439,16 @@ syn match lumenStringEsc contained display /\\[\abtnvfre'"]/
 " syn match lumenStringEsc contained display "\\\Cu\x\{1,4}" 
 " syn match lumenStringEsc contained display "\\\CU\x\{1,8}" 
 
-syn match lumenAtStringAt contained display "@@" 
+" syn match lumenAtStringAt contained "@[^\()[\]\{\}\\'`,"@]\+"
+syn match lumenAtStringAt contained display "@"
 
-syn match lumenAtStringExpr contained skipwhite skipempty "@@\@!" nextgroup=@lumenListCluster,lumenParen.* 
+syn match lumenAtStringExpr contained skipwhite skipempty "@@\@!" nextgroup=@lumenAtStringAt,lumenListCluster,lumenParen.* 
 
-" if exists("g:lumen_always_atstrings") && g:lumen_always_atstrings != 0
-"   syn region lumenString start=/"/ skip=/\%(\\\\\|\\"\)/ end=/"/ contains=@Spell,lumenStringEsc,lumenStringEscError,lumenAtStringAt,lumenAtStringExpr 
-" else
-syn region lumenString start=/"/ skip=/\%(\\\\\|\\"\)/ end=/"/ contains=@Spell,lumenStringEsc,lumenStringEscError 
-" endif
+if exists("g:lumen_always_atstrings") && g:lumen_always_atstrings != 0
+  syn region lumenString start=/"/ skip=/\%(\\\\\|\\"\)/ end=/"/ contains=@Spell,lumenStringEsc,lumenStringEscError,lumenAtStringAt,lumenAtStringExpr 
+else
+  syn region lumenString start=/"/ skip=/\%(\\\\\|\\"\)/ end=/"/ contains=@Spell,lumenStringEsc,lumenStringEscError 
+endif
 
 "-------------------------------------------------------------------------------
 " Numbers:
