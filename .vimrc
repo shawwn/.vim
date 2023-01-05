@@ -380,8 +380,8 @@ colorscheme solarized
 " actually, set a light background scheme because my M1 Air can't seem
 " to emit more than 1 lumen.
 "------------------------------------------------------
-set background=light
-colorscheme morning
+" set background=light
+" colorscheme morning
 "------------------------------------------------------
 
 
