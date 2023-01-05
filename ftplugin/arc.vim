@@ -38,7 +38,7 @@ setl formatoptions+=crql
 " If nonzero, the following options will perform these actions on buffer
 " write:
 "  g:arc_bodops              - macros that have body (rest) parameters will
-"                              be added to &lispwords.  Requires +python.
+"                              be added to &lispwords.  Requires +python3.
 "  g:arc_highlight_lispwords - each word in &lispwords will be highlighted.
 "  g:arc_detect_atstrings    - detects expressions like
 "                                (declare 'astrings t)
@@ -47,8 +47,8 @@ setl formatoptions+=crql
 "                              using them in your code.
 
 
-if has('python')
-python << EOF
+if has('python3')
+py3 << EOF
 import vim
 import re
 
@@ -73,11 +73,11 @@ endif
 if exists("g:arc_bodops") && g:arc_bodops != 0
 
 function! ArcBodops()
-  if has('python')
-    python update_lispwords()
-    au BufWrite <buffer> python update_lispwords()
+  if has('python3')
+    py3 update_lispwords()
+    au BufWrite <buffer> py3 update_lispwords()
   else
-    echo 'arc_bodops is only available with +python support.'
+    echo 'arc_bodops is only available with +python3 support.'
   endif
 endfunction
 
