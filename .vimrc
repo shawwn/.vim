@@ -264,6 +264,9 @@ au BufRead,BufNewFile *.go setf go
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Vundle plugin manager.
+" Setup instructions:
+"  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+"  open macvim, then run :PluginInstall!
 "------------------------------------------------------
 filetype off " required
 
