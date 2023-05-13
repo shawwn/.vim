@@ -20,7 +20,7 @@ setl lisp
 
 setl define=^\\s*(\\%(def\\k*\\\|mac\\)
 
-setl lispwords=accum,afn,aform,aformh,after,annotate,arform,arformh,atlet,atomic,atwith,atwiths,awhen,case,caselet,catch,ccc,cdata,center,var,def,defbg,defcache,defhook,defmemo,defop,defop-raw,defopl,defopr,defopr-raw,defset,deftem,down,each,fn,fontcolor,for,forlen,form,fromstring,let,linkf,loop,mac,noisy-each,on,onlink,onrlink,point,prbold,repeat,rfn,rlinkf,spanclass,spanrow,sptab,summing,taform,tag,tag-if,tarform,td,tdcolor,tdr,textarea,thread,tostring,uform,ulink,underline,unless,until,urform,w/appendfile,w/infile,w/instring,w/link,w/link-if,w/outfile,w/outstring,w/rlink,w/socket,w/stdin,w/stdout,w/table,w/uniq,when,when-umatch,when-umatch/r,whenlet,while,whiler,whilet,whitepage,widtable,with,withs,zerotable
+setl lispwords=accum,afn,aform,aformh,after,annotate,arform,arformh,atlet,atomic,atwith,atwiths,awhen,case,caselet,catch,ccc,cdata,center,var,def,defbg,defcache,defhook,defmemo,defop,defop-raw,defopl,defopr,defopr-raw,defset,deftem,down,each,fn,fontcolor,for,forlen,form,fromstring,let,linkf,loop,mac,noisy-each,on,onlink,onrlink,point,prbold,repeat,rfn,rlinkf,spanclass,spanrow,sptab,summing,taform,tag,tag-if,tarform,td,tdcolor,tdr,textarea,thread,tostring,uform,ulink,underline,unless,until,urform,w/appendfile,w/bars,w/infile,w/instring,w/link,w/link-if,w/outfile,w/outstring,w/rlink,w/socket,w/stdin,w/stdout,w/table,w/uniq,when,when-umatch,when-umatch/r,whenlet,while,whiler,whilet,whitepage,widtable,with,withs,zerotable
 setl lispwords+=%function,%local-function,%global-function,%define,case,case-let,class,def,define,define*,define-global,define-global*,define-macro,define-reader,define-special,define-symbol,define-test,each,fn,fn*,for,guard,let,let*,let-macro,let-symbol,let-unique,let-if,let-when,mac,on,step,unless,when,while,with,with-bindings,with-frame,with-indent,when-compiling,during-compilation,var,lambda,try,catch,%fn,%let,parameterize,static,%static,%case,%switch,switch,%class,define-method,define-template,define-getter,define-setter,=define,=defun,=bind,=fn,=lambda,defmacro,defun,lambda
 
 "-------------------------------------------------------------------------------
@@ -48,34 +48,15 @@ setl formatoptions+=crql
 
 
 if has('python3')
-py3 << EOF
-import vim
-import re
-
-additional_lispwords = []
-def update_lispwords():
-    #vim.command('echo 1\n2')
-    global additional_lispwords
-    for lw in additional_lispwords:
-        vim.command('setl lw-=' + lw)
-    additional_lispwords = []
-    for line in vim.current.buffer:
-        #match = re.match('^\(mac\s+(\S+)\s+(\(.+\.\s+body\)|body)', line)
-        match = re.match('^\((?:def\S*|mac)\s+(\S+)\s+(\(.+(?:rest:|[.])\s+body\)|body)', line)
-        #match = re.match('^\((def\S*|mac|macro)\s+(\S+)\s+(\(.+\s+body\)|body)', line)
-        if match:
-            macro = match.groups()[0]
-            vim.command('setl lw+=' + macro)
-            additional_lispwords.append(macro)
-EOF
+  py3file ~/.vim/ftplugin/bodops.py
 endif
 
 if exists("g:arc_bodops") && g:arc_bodops != 0
 
 function! ArcBodops()
   if has('python3')
-    py3 update_lispwords()
-    au BufWrite <buffer> py3 update_lispwords()
+    python3 update_lispwords()
+    au BufWrite <buffer> python3 update_lispwords()
   else
     echo 'arc_bodops is only available with +python3 support.'
   endif
@@ -98,10 +79,10 @@ function! ArcLispwords()
   endfu
 
   call HighlightLispwords()
-  au BufWrite <buffer> call HighlightLispwords()
 endfunction
 
 call ArcLispwords()
+au BufWrite <buffer> call ArcLispwords()
 
 endif
 

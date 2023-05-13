@@ -47,34 +47,8 @@ setl formatoptions+=crql
 "                                on/off automatically based on whether you're
 "                                using them in your code.
 
-
 if has('python3')
-python3 << EOF
-import vim
-import re
-
-additional_lispwords = []
-def update_lispwords(verbose=False):
-    global additional_lispwords
-    for lw in additional_lispwords:
-        vim.command('setl lw-=' + lw)
-    additional_lispwords = []
-    for line in vim.current.buffer:
-      # match = re.match('^\(mac\s+(\S+)\s+(\(.+\.\s+body\)|body)', line)
-      #match = re.match('^\(define-macro\s+(\S+)\s+(\(.+rest:\s+body\)|body)', line)
-      #match = re.match('^\s*\((?:def\S*|\S+-def\S*|mac|var)\s+(\S+)\s+(\(.+(?:rest:|[.])\s+body\)|body)', line)
-      #match = re.match(r'^\s*\((?:def\S*|\S+-def\S*|mac|var)\s+(\S+)[^$]*\bbody\b[)]+?$', line, re.M)
-      # as of 20201-03-30:
-      #match = re.match(r'^\s*\((?:def\S*|\S+-def\S*|mac|var)\s+(\S+)[^$]*[^,@]\bbody\b[)]+?$', line, re.M)
-      #match = re.match(r'^\s*\((?:def\S*|\S+-def\S*|mac|var)\s+(\S+)[^;$]*[^;,@]\bbody\b[)]+?$', line, re.M)
-      match = re.match(r'^\s*\((?:def\S*|\S+-def\S*|mac|var)\s+(\S+)(?:([^;$]*[^;,@]\bbody\b([)]+?|$))|(.*;[ ]*indent[ ]body))', line)
-      if match:
-          macro = match.groups()[0]
-          if verbose: print('setl lw+=' + macro)
-          vim.command('setl lw+=' + macro)
-          additional_lispwords.append(macro)
-    if verbose: print('-------------')
-EOF
+  py3file ~/.vim/ftplugin/bodops.py
 endif
 
 function! LumenBodops()
@@ -94,6 +68,8 @@ endif
 
 if exists("g:lumen_highlight_lispwords") && g:lumen_highlight_lispwords != 0
 
+function! LumenLispwords()
+
   hi def link lumenLispWord lumenFn
   fu! HighlightLispwords ()
     syn clear lumenLispWord
@@ -104,6 +80,9 @@ if exists("g:lumen_highlight_lispwords") && g:lumen_highlight_lispwords != 0
 
   call HighlightLispwords()
   au BufWrite <buffer> call HighlightLispwords()
+endfunction
+
+call LumenLispwords()
 
 endif
 
