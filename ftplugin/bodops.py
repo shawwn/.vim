@@ -71,7 +71,7 @@ def find_repo(path="."):
 def find_root(path="."):
   p = realpath(path)
   if p.exists():
-    return find_repo(p) or p
+    return find_repo(p) or realdir(p)
 
 def lispfiles(path=".", pattern="*.arc,*.scm,*.rkt,*.l,*.lisp,*.el", recursive=True, maxdepth=4):
   if path := find_root(path):
