@@ -1,4 +1,7 @@
-import vim
+try:
+  import vim
+except ImportError:
+  pass
 import os
 import re
 from pathlib import Path
