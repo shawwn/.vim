@@ -32,12 +32,12 @@ syn cluster arcListCluster contains=TOP,arcParenError,arcParen0,arcParen1,arcPar
 "-------------------------------------------------------------------------------
 " Identifiers:
 
-syn match arcIdent display /[^\()[\]'`,"; \t|]\+/ contains=arcSsyntax,arcFn,arcVar,arcGlobal,arcNonfloat 
-syn match arcIdent display "|..\{-}|" contains=arcSsyntax,arcFn,arcVar,arcGlobal,arcNonfloat 
+syn match arcIdent display /[^\()[\]{}'`,"; \t]\+/ contains=arcSsyntax,arcFn,arcVar,arcGlobal,arcNonfloat 
+syn match arcIdent display "|.\{-}|" contains=arcSsyntax,arcFn,arcVar,arcGlobal,arcNonfloat 
 
-syn match arcSsyntax display "[:#~&.!@]" 
-syn match arcSsyntax display /![^\()[\]'`,"; \t|:#~&.!@]\+/ 
-syn match arcSsyntax display "!|..\{-}|" 
+syn match arcSsyntax display "[:#~&.!@|]" 
+syn match arcSsyntax display /![^\()[\]{}'`,"; \t|:#~&.!@]\+/ 
+syn match arcSsyntax display "!|.\{-}|" 
 
 "-------------------------------------------------------------------------------
 " Lists:
@@ -51,39 +51,43 @@ syn match arcDotted display "\s\.\s"
 syn match arcParenError display ")" 
 
 if exists("g:arc_rainbow") && g:arc_rainbow != 0
-  syn region arcParen0 matchgroup=hlLevel0 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel0 end=")" contains=@arcListCluster,arcParen1 
-  syn region arcParen1 matchgroup=hlLevel1 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel1 end=")" contains=@arcListCluster,arcParen2 contained 
-  syn region arcParen2 matchgroup=hlLevel2 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel2 end=")" contains=@arcListCluster,arcParen3 contained 
-  syn region arcParen3 matchgroup=hlLevel3 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel3 end=")" contains=@arcListCluster,arcParen4 contained 
-  syn region arcParen4 matchgroup=hlLevel4 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel4 end=")" contains=@arcListCluster,arcParen5 contained 
-  syn region arcParen5 matchgroup=hlLevel5 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel5 end=")" contains=@arcListCluster,arcParen6 contained 
-  syn region arcParen6 matchgroup=hlLevel6 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel6 end=")" contains=@arcListCluster,arcParen7 contained 
-  syn region arcParen7 matchgroup=hlLevel7 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel7 end=")" contains=@arcListCluster,arcParen8 contained 
-  syn region arcParen8 matchgroup=hlLevel8 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel8 end=")" contains=@arcListCluster,arcParen9 contained 
-  syn region arcParen9 matchgroup=hlLevel9 start="`\=(" skip="|..\{-}|" matchgroup=hlLevel9 end=")" contains=@arcListCluster,arcParen0 contained 
+  syn region arcParen0 matchgroup=hlLevel0 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel0 end=")" contains=@arcListCluster,arcParen1 
+  syn region arcParen1 matchgroup=hlLevel1 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel1 end=")" contains=@arcListCluster,arcParen2 contained 
+  syn region arcParen2 matchgroup=hlLevel2 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel2 end=")" contains=@arcListCluster,arcParen3 contained 
+  syn region arcParen3 matchgroup=hlLevel3 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel3 end=")" contains=@arcListCluster,arcParen4 contained 
+  syn region arcParen4 matchgroup=hlLevel4 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel4 end=")" contains=@arcListCluster,arcParen5 contained 
+  syn region arcParen5 matchgroup=hlLevel5 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel5 end=")" contains=@arcListCluster,arcParen6 contained 
+  syn region arcParen6 matchgroup=hlLevel6 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel6 end=")" contains=@arcListCluster,arcParen7 contained 
+  syn region arcParen7 matchgroup=hlLevel7 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel7 end=")" contains=@arcListCluster,arcParen8 contained 
+  syn region arcParen8 matchgroup=hlLevel8 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel8 end=")" contains=@arcListCluster,arcParen9 contained 
+  syn region arcParen9 matchgroup=hlLevel9 start="`\=(" skip="|.\{-}|" matchgroup=hlLevel9 end=")" contains=@arcListCluster,arcParen0 contained 
 else
-  syn region arcList matchgroup=Delimiter start="(" skip="|..\{-}|" matchgroup=Delimiter end=")" contains=@arcListCluster 
-  syn region arcQQList matchgroup=PreProc start="`(" skip="|..\{-}|" matchgroup=PreProc end=")" contains=@arcListCluster 
+  syn region arcList matchgroup=Delimiter start="(" skip="|.\{-}|" matchgroup=Delimiter end=")" contains=@arcListCluster 
+  syn region arcQQList matchgroup=PreProc start="`(" skip="|.\{-}|" matchgroup=PreProc end=")" contains=@arcListCluster 
 endif
 
 "-------------------------------------------------------------------------------
 " Bracket Functions:
 
-syn region arcBracketFn matchgroup=SpecialChar start="\[" skip="|..\{-}|" matchgroup=SpecialChar end="]" contains=TOP 
+syn region arcBracketFn matchgroup=SpecialChar start="\[" skip="|.\{-}|" matchgroup=SpecialChar end="]" contains=TOP 
 
 syn match arcBracketError display "]" 
+
+syn region arcBracesFn matchgroup=SpecialChar start="{" skip="|.\{-}|" matchgroup=SpecialChar end="}" contains=TOP 
+
+syn match arcBracesError display "}" 
 
 "-------------------------------------------------------------------------------
 " Symbols:
 
 syn match arcQuote display "'" 
 
-syn match arcSym display /'[^\()[\]'`,"; \t|]\+/ contains=arcQuote 
-syn match arcSym display "'|..\{-}|" contains=arcQuote 
+syn match arcSym display /'[^\()[\]\{\}'`,"; \t]\+/ contains=arcQuote 
+syn match arcSym display "'|.\{-}|" contains=arcQuote 
 
 syn region arcSym start=/'"/ skip=/\\"/ end=/"/ 
 
-syn region arcSymList matchgroup=Type start="'(" skip="|..\{-}|" matchgroup=Type end=")" contains=TOP 
+syn region arcSymList matchgroup=Type start="'(" skip="|.\{-}|" matchgroup=Type end=")" contains=TOP 
 
 "-------------------------------------------------------------------------------
 " Standard Functions And Macros:
@@ -695,7 +699,7 @@ syn keyword arcFn zerotable
 "-------------------------------------------------------------------------------
 " Variables:
 
-syn match arcGlobal display /[^\()[\]'`,"; \t|:#~&.!@]\+\*/ 
+syn match arcGlobal display /[^\()[\]\{\}'`,"; \t|:#~&.!@]\+\*/ 
 
 syn keyword arcVar adminfile*
 syn keyword arcVar appdir*
@@ -770,7 +774,7 @@ syn keyword arcVar white
 "-------------------------------------------------------------------------------
 " Optional Parameters:
 
-syn region arcOpt matchgroup=Identifier start="(o\>" skip="|..\{-}|" matchgroup=Identifier end=")" contains=TOP 
+syn region arcOpt matchgroup=Identifier start="(o\>" skip="|.\{-}|" matchgroup=Identifier end=")" contains=TOP 
 
 "-------------------------------------------------------------------------------
 " Strings:
@@ -788,7 +792,6 @@ syn match arcAtStringAt contained display "@@"
 syn match arcAtStringExpr contained skipwhite skipempty "@@\@!" nextgroup=@arcListCluster,arcParen.* 
 
 if exists("g:arc_always_atstrings") && g:arc_always_atstrings != 0
-  " syn region arcString start=/"/ skip=/\%(\\\\\|\\"\)/ end=/"/ contains=@Spell,arcStringEsc,arcStringEscError,arcAtStringAt,arcAtStringExpr 
   syn region arcString start=/"/ skip=/\%(\\\\\|\\"\)/ end=/"/ contains=@Spell,arcStringEsc,arcStringEscError,arcAtStringAt,arcAtStringExpr 
 else
   syn region arcString start=/"/ skip=/\%(\\\\\|\\"\)/ end=/"/ contains=@Spell,arcStringEsc,arcStringEscError 
@@ -810,8 +813,7 @@ syn match arcNumber display !\%(^\|[\()[\]'`,"; \t|]\)\@<=\%(#x\%(#[ie]\)\=\|\%(
 "-------------------------------------------------------------------------------
 " Character Literals:
 
-syn match arcChar "#\\[ -#]" 
-syn match arcChar "#\\\%(null\|nul\|backspace\|tab\|newline\|linefeed\|vtab\|page\|return\|space\|rubout\)" 
+syn match arcChar /\%([#]\|[\\]\)\?[\\]\%([a-zA-Z-_]\+\|[\\].\|.\)/
 syn match arcChar "#\\[0-3][0-7][0-7]" 
 syn match arcChar "#\\\Cu\x\{1,4}" 
 syn match arcChar "#\\\CU\x\{1,6}" 
@@ -835,6 +837,7 @@ syn region arcCommentRegion start="#|" end="|#" contains=arcCommentRegion,@arcCo
 hi def link arcAtStringAt SpecialChar
 hi def link arcAtStringExpr SpecialChar
 hi def link arcBracketError Error
+hi def link arcBracesError Error
 hi def link arcChar Type
 hi def link arcComment Comment
 hi def link arcCommentRegion Comment
