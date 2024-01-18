@@ -813,7 +813,7 @@ syn match arcNumber display !\%(^\|[\()[\]'`,"; \t|]\)\@<=\%(#x\%(#[ie]\)\=\|\%(
 "-------------------------------------------------------------------------------
 " Character Literals:
 
-syn match arcChar /\%([#]\|[\\]\)\?[\\]\%([a-zA-Z-_]\+\|[\\].\|.\)/
+syn match arcChar /[#]\?[\\]\%([a-zA-Z-_]\+\|.\)/
 syn match arcChar "#\\[0-3][0-7][0-7]" 
 syn match arcChar "#\\\Cu\x\{1,4}" 
 syn match arcChar "#\\\CU\x\{1,6}" 
