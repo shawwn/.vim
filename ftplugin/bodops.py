@@ -1,7 +1,11 @@
 try:
   import vim
 except ImportError:
-  pass
+  vim = None
+except SystemError as e:
+  import sys
+  print(f"bodops.py: vim Python version mismatch — {e}", file=sys.stderr)
+  vim = None
 import os
 import re
 from pathlib import Path
@@ -93,6 +97,8 @@ def find_bodops(path=".", recursive=True):
     yield from bodops(Path(file))
 
 def bodops_for_buffer(buf=None, recursive=True):
+  if vim is None:
+    return
   if buf is None:
     buf = vim.current.buffer
   path = realpath(buf.name)
@@ -106,6 +112,8 @@ def bodops_for_buffer(buf=None, recursive=True):
 additional_lispwords = []
 
 def update_lispwords(verbose=False, buf=None):
+  if vim is None:
+    return
   if buf is None:
     buf = vim.current.buffer
   for lw in additional_lispwords:
