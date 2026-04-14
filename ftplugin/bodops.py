@@ -24,7 +24,10 @@ def bodop(line):
 
 def read_lines(text):
   if isinstance(text, Path):
-    text = text.read_text()
+    try:
+      text = text.read_text(encoding='utf-8', errors='ignore')
+    except OSError:
+      return []
   if hasattr(text, 'read'):
     text = text.read()
   return text.splitlines()
@@ -42,10 +45,14 @@ def bodops(text):
 
 def files(path, patterns, recursive=True, maxdepth=4, depth=0):
   p = Path(path)
-  for file in p.iterdir():
+  try:
+    entries = list(p.iterdir())
+  except (PermissionError, OSError):
+    return
+  for file in entries:
     if any([file.match(pattern) for pattern in patterns.split(",")]):
       yield file
-    if recursive and depth < maxdepth and file.is_dir():
+    if recursive and depth < maxdepth and file.is_dir() and not file.is_symlink():
       yield from files(file, patterns, recursive=recursive, maxdepth=maxdepth, depth=depth+1)
 
 def realpath(path="."):
