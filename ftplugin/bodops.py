@@ -1,14 +1,15 @@
+import sys
+import os
+import re
+from pathlib import Path
+
 try:
   import vim
 except ImportError:
   vim = None
 except SystemError as e:
-  import sys
   print(f"bodops.py: vim Python version mismatch — {e}", file=sys.stderr)
   vim = None
-import os
-import re
-from pathlib import Path
 
 def bodop(line):
   #match = re.match('^\(mac\s+(\S+)\s+(\(.+\.\s+body\)|body)', line)

@@ -48,15 +48,31 @@ setl formatoptions+=crql
 
 
 if has('python3')
-  py3file ~/.vim/ftplugin/bodops.py
+  try
+    py3file ~/.vim/ftplugin/bodops.py
+  catch
+    echohl WarningMsg
+    echomsg "arc.vim: bodops.py failed to load — " . v:exception
+    echohl None
+  endtry
 endif
 
 if exists("g:arc_bodops") && g:arc_bodops != 0
 
+function! s:RunUpdateLispwords()
+  try
+    python3 update_lispwords()
+  catch
+    echohl WarningMsg
+    echomsg "arc.vim: update_lispwords failed — " . v:exception
+    echohl None
+  endtry
+endfunction
+
 function! ArcBodops()
   if has('python3')
-    python3 update_lispwords()
-    au BufWrite <buffer> python3 update_lispwords()
+    call s:RunUpdateLispwords()
+    au BufWrite <buffer> call s:RunUpdateLispwords()
   else
     echo 'arc_bodops is only available with +python3 support.'
   endif
