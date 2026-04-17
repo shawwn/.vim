@@ -86,10 +86,10 @@ def find_repo(path="."):
 def find_root(path="."):
   p = realpath(path)
   if p.exists():
-    return find_repo(p) or realdir(p)
+    return find_repo(p)
 
 def lispfiles(path=".", pattern="*.arc,*.scm,*.rkt,*.l,*.lisp,*.el", recursive=True, maxdepth=4):
-  if path := find_root(path):
+  if path and (path := find_root(path)):
     return files(path, pattern, recursive=recursive, maxdepth=maxdepth)
   return []
 
@@ -102,10 +102,11 @@ def bodops_for_buffer(buf=None, recursive=True):
     return
   if buf is None:
     buf = vim.current.buffer
-  path = realpath(buf.name)
-  for file in lispfiles(path, recursive=recursive):
-    if file != path: # skip current buffer's file
-      yield from bodops(Path(file))
+  if buf.name:
+    path = realpath(buf.name)
+    for file in lispfiles(path, recursive=recursive):
+      if file != path: # skip current buffer's file
+        yield from bodops(Path(file))
   text = '\n'.join(list(buf))
   yield from bodops(text)
 
