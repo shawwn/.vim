@@ -775,6 +775,7 @@ syn keyword arcVar white
 " Optional Parameters:
 
 syn region arcOpt matchgroup=Identifier start="(o\>" skip="|.\{-}|" matchgroup=Identifier end=")" contains=TOP 
+syn region arcThreadLocal matchgroup=Identifier start="(t\>" skip="|.\{-}|" matchgroup=Identifier end=")" contains=TOP 
 
 "-------------------------------------------------------------------------------
 " Strings:
@@ -848,6 +849,7 @@ hi def link arcGlobal Identifier
 hi def link arcNonfloat Number
 hi def link arcNumber Number
 hi def link arcOpt Type
+hi def link arcThreadLocal Type
 hi def link arcParenError Error
 hi def link arcQQ PreProc
 hi def link arcQuote Type
