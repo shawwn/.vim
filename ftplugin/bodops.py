@@ -55,10 +55,11 @@ def files(path, patterns, recursive=True, maxdepth=4, depth=0):
   except (PermissionError, OSError):
     return
   for file in entries:
-    if any([file.match(pattern) for pattern in patterns.split(",")]):
-      yield file
-    if recursive and depth < maxdepth and file.is_dir() and not file.is_symlink():
-      yield from files(file, patterns, recursive=recursive, maxdepth=maxdepth, depth=depth+1)
+    if not file.match("arc"): # don't search data dirs, since they can be deep
+      if any([file.match(pattern) for pattern in patterns.split(",")]):
+        yield file
+      if recursive and depth < maxdepth and file.is_dir() and not file.is_symlink():
+        yield from files(file, patterns, recursive=recursive, maxdepth=maxdepth, depth=depth+1)
 
 def realpath(path="."):
     return Path(path).expanduser().resolve()
