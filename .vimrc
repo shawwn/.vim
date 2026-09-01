@@ -377,9 +377,14 @@ filetype plugin indent on
 " set a dark background scheme.
 "------------------------------------------------------
 set background=dark
-let g:solarized_italic=0
-let g:solarized_contrast="high"
-colorscheme solarized
+
+" Solarized only under MacVim/gVim; elsewhere fall back to vim's
+" default.
+if has('gui_running')
+  let g:solarized_italic=0
+  let g:solarized_contrast="high"
+  silent! colorscheme solarized
+endif
 "------------------------------------------------------
 
 
