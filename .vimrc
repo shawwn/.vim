@@ -594,3 +594,34 @@ endfunction
 "------------------------------------------------------
 
 let mapleader = "\<Space>"
+
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" System clipboard: Ctrl-C / Ctrl-V, with blockwise on Ctrl-Q
+"------------------------------------------------------
+" Guarded: 'unnamedplus' needs a vim built with +clipboard (vim-gtk3 on
+" Ubuntu, MacVim on macOS). Plain terminal vim on Ubuntu is -clipboard and
+" would error on startup without this check.
+if has('clipboard')
+  " Make plain y/d/p use the system clipboard, so no "+ prefix is ever needed.
+  " Caveat: this means deletes also overwrite the clipboard.
+  set clipboard=unnamedplus
+endif
+
+" Copy the visual selection. Safe to remap: <C-c> in visual mode otherwise
+" just leaves visual mode.
+vnoremap <C-c> "+y
+
+" Paste from the system clipboard.
+"   <C-r><C-o>+ inserts the register literally, without auto-indent mangling
+"   the text -- the usual cause of paste turning into a staircase.
+nnoremap <C-v> "+p
+vnoremap <C-v> "+p
+inoremap <C-v> <C-r><C-o>+
+cnoremap <C-v> <C-r>+
+
+" <C-v> was blockwise-visual (column select), so move it to <C-q>.
+" NB: in a TERMINAL, <C-q> may be swallowed by XON/XOFF flow control.
+" `stty -ixon` in your shell rc frees it. In gvim this is not an issue.
+noremap <C-q> <C-v>
+"------------------------------------------------------
