@@ -625,3 +625,31 @@ cnoremap <C-v> <C-r>+
 " `stty -ixon` in your shell rc frees it. In gvim this is not an issue.
 noremap <C-q> <C-v>
 "------------------------------------------------------
+
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" Zoom gvim font in/out with Ctrl-= and Ctrl-- (like a browser).
+"------------------------------------------------------
+" Only meaningful in the GUI. Font-name format here is GTK's
+" ("Monospace 12"); on MacVim it would be "Monospace:h12" instead.
+if has('gui_running')
+  " Give ourselves a known starting point if none is set.
+  if &guifont == ''
+    set guifont=Monospace\ 12
+  endif
+
+  function! AdjustFontSize(amount)
+    let l:size = matchstr(&guifont, '\d\+$')
+    let l:name = substitute(&guifont, '\d\+$', '', '')
+    let &guifont = l:name . max([1, l:size + a:amount])
+  endfunction
+
+  nnoremap <C-=> :call AdjustFontSize(1)<CR>
+  " Ctrl-minus: many gvim builds report it as <C-_> rather than <C-->,
+  " and the numpad minus arrives as <C-kMinus>. Bind all three so
+  " zoom-out fires no matter which one this build sends.
+  nnoremap <C--> :call AdjustFontSize(-1)<CR>
+  nnoremap <C-_> :call AdjustFontSize(-1)<CR>
+  nnoremap <C-kMinus> :call AdjustFontSize(-1)<CR>
+endif
+"------------------------------------------------------
