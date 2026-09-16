@@ -3,7 +3,7 @@
 "------------------------------------------------------
 " highlight, and search incrementally as we type.
 set hlsearch
-"set incsearch
+set incsearch
 " ignore case for the purposes of searching;  however if we 
 " use an uppercase character, then treat it as case-sensitive.
 set smartcase
