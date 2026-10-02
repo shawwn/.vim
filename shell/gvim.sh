@@ -66,8 +66,10 @@
 #
 # WHY EACH PIECE IS THERE (all four were real bugs, not theory):
 #
-#   1. $GV holds the resolved gvim BINARY. `timeout` and `setsid` exec a real
-#      program and cannot run the `command` shell builtin, so
+#   1. $GV holds the resolved gvim BINARY. It is looked up with this function
+#      unset, since `command -v gvim` otherwise returns the function name and
+#      plain `gvim` recurses until the shell crashes. `timeout` and `setsid`
+#      exec a real program and cannot run the `command` shell builtin, so
 #      `timeout 3 command gvim ...` fails with "failed to run command 'command'"
 #      and returns nothing -- every server probe silently comes back empty and
 #      you always get a new window.
@@ -91,7 +93,7 @@
 # focus a.txt's window AND open a new window for b.txt.
 
 gvim() {
-  local GV; GV=$(command -v gvim) || return 1
+  local GV; GV=$(unset -f gvim; command -v gvim) || return 1
   [ $# -eq 0 ] && { "$GV"; return; }
 
   local f abs srv found wid
