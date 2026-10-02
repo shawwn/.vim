@@ -597,7 +597,7 @@ let mapleader = "\<Space>"
 
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" System clipboard: Ctrl-C / Ctrl-V, with blockwise on Ctrl-Q
+" Windows-style keys: Ctrl-A/C/X/V/S/Z, Shift-Insert.
 "------------------------------------------------------
 " Guarded: 'unnamedplus' needs a vim built with +clipboard (vim-gtk3 on
 " Ubuntu, MacVim on macOS). Plain terminal vim on Ubuntu is -clipboard and
@@ -608,22 +608,38 @@ if has('clipboard')
   set clipboard=unnamedplus
 endif
 
-" Copy the visual selection. Safe to remap: <C-c> in visual mode otherwise
-" just leaves visual mode.
-vnoremap <C-c> "+y
-
-" Paste from the system clipboard.
-"   <C-r><C-o>+ inserts the register literally, without auto-indent mangling
-"   the text -- the usual cause of paste turning into a staircase.
-nnoremap <C-v> "+p
-vnoremap <C-v> "+p
+" Ctrl-V stays blockwise visual in normal/visual mode. It pastes only in
+" insert and cmdline mode, where Ctrl-Q still inserts a literal character.
+" <C-r><C-o>+ inserts literally, so auto-indent can't staircase the paste.
 inoremap <C-v> <C-r><C-o>+
 cnoremap <C-v> <C-r>+
 
-" <C-v> was blockwise-visual (column select), so move it to <C-q>.
-" NB: in a TERMINAL, <C-q> may be swallowed by XON/XOFF flow control.
-" `stty -ixon` in your shell rc frees it. In gvim this is not an issue.
-noremap <C-q> <C-v>
+" Copy / cut the visual selection.
+vnoremap <C-c> "+y
+vnoremap <C-x> "+d
+
+" Shift-Insert pastes in every mode.
+nnoremap <S-Insert> "+gP
+vnoremap <S-Insert> "+gP
+inoremap <S-Insert> <C-r><C-o>+
+cnoremap <S-Insert> <C-r>+
+
+" Select all. Replaces Ctrl-A increment; g<C-a> in visual mode still works.
+nnoremap <C-a> ggVG
+vnoremap <C-a> <Esc>ggVG
+inoremap <C-a> <Esc>ggVG
+
+" Save if modified, without leaving the current mode.
+" NB: in a TERMINAL, Ctrl-S is XOFF unless `stty -ixon` is in your shell rc.
+noremap  <C-s> <Cmd>update<CR>
+inoremap <C-s> <Cmd>update<CR>
+
+" Undo. Normal-mode Ctrl-Z is GUI-only so terminal vim can still suspend.
+" Redo stays on Ctrl-R; Ctrl-Y is left as scroll-up.
+inoremap <C-z> <C-o>u
+if has('gui_running')
+  nnoremap <C-z> u
+endif
 "------------------------------------------------------
 
 
