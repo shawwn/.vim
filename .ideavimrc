@@ -25,3 +25,6 @@ let mapleader = " "
 nnoremap <leader>a :action ToggleDistractionFreeMode<CR>
 nnoremap <leader>z :action ToggleZenMode<CR>
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+" After pressing ctrl-B (go to definition), let ctrl-T take you back
+nnoremap <C-t> <C-o>
