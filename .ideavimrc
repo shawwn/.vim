@@ -11,3 +11,16 @@ set ignorecase
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 set ideajoin
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" leader mappings.
+"------------------------------------------------------
+" use space as the leader key.  this must come before any
+" mapping below that uses <leader>, since the leader is
+" expanded when the mapping is defined, not when it runs.
+let mapleader = " "
+" toggle distraction free mode: hides the tool windows, tabs,
+" and gutter.  the same key exits it.  swap the action for
+" ToggleZenMode to get distraction free plus full screen.
+nnoremap <leader>z :action ToggleDistractionFreeMode<CR>
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
