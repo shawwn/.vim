@@ -22,5 +22,6 @@ let mapleader = " "
 " toggle distraction free mode: hides the tool windows, tabs,
 " and gutter.  the same key exits it.  swap the action for
 " ToggleZenMode to get distraction free plus full screen.
-nnoremap <leader>z :action ToggleDistractionFreeMode<CR>
+nnoremap <leader>a :action ToggleDistractionFreeMode<CR>
+nnoremap <leader>z :action ToggleZenMode<CR>
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
